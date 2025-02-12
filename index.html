@@ -27,10 +27,24 @@
             background-color: white;
             border: 2px solid #3498db;
             cursor: pointer;
+            position: relative;
+            transition: background-color 0.2s ease;
         }
         .cell.taken {
             pointer-events: none;
         }
+        .cell.highlight {
+            background-color: #f6ad55; /* Highlight the winning cells */
+        }
+        .cell.line {
+            background-color: rgba(0, 0, 0, 0.2); /* Line cells */
+        }
+       .winning-line {
+    position: absolute;
+    background-color: #ff6347;
+    height: 4px; /* Line thickness */
+    z-index: 10;
+}
     </style>
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
@@ -52,15 +66,15 @@
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
         // TODO: Replace with your Firebase Config
- const firebaseConfig = {
-    apiKey: "AIzaSyAAj-4Aam5P8dg7DeyR_jAiDBiH0W7xIT8",
-    authDomain: "sampleproject-5234f.firebaseapp.com",
-    projectId: "sampleproject-5234f",
-    storageBucket: "sampleproject-5234f.firebasestorage.app",
-    messagingSenderId: "73384704943",
-    appId: "1:73384704943:web:397285ecc1b86d5cd54d5a",
-    measurementId: "G-TH1F1J73CK"
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAj-4Aam5P8dg7DeyR_jAiDBiH0W7xIT8",
+            authDomain: "sampleproject-5234f.firebaseapp.com",
+            projectId: "sampleproject-5234f",
+            storageBucket: "sampleproject-5234f.firebasestorage.app",
+            messagingSenderId: "73384704943",
+            appId: "1:73384704943:web:397285ecc1b86d5cd54d5a",
+            measurementId: "G-TH1F1J73CK"
+        };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -70,6 +84,7 @@
         let board = ["", "", "", "", "", "", "", "", ""];
         let currentPlayer = "X";
         let gameActive = true;
+        let winningCells = [];
 
         const gameBoard = document.getElementById("gameBoard");
         const statusDisplay = document.getElementById("status");
@@ -87,8 +102,10 @@
                 let [a, b, c] = condition;
                 if (board[a] && board[a] === board[b] && board[a] === board[c]) {
                     gameActive = false;
+                    winningCells = [a, b, c];
                     logEvent(analytics, "game_won", { winner: currentPlayer });
                     statusDisplay.textContent = `${currentPlayer} Wins! 🎉`;
+                    highlightWinningCells();
                     return true;
                 }
             }
@@ -100,6 +117,16 @@
             }
             return false;
         }
+
+     function highlightWinningCells() {
+    winningCells.forEach((index) => {
+        document.getElementById(`cell-${index}`).classList.add("highlight");
+    });
+ 
+}
+
+
+
 
         function handleCellClick(index) {
             if (!gameActive || board[index] !== "") return;
@@ -121,6 +148,7 @@
             board = ["", "", "", "", "", "", "", "", ""];
             currentPlayer = "X";
             gameActive = true;
+            winningCells = [];
             statusDisplay.textContent = "Player X's turn";
 
             logEvent(analytics, "game_started");
