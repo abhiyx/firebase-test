@@ -54,6 +54,9 @@
         <button id="googleLoginButton" class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
             Log in with Google
         </button>
+        <button id="twitterLoginButton" class="mt-4 bg-blue-400 text-white px-6 py-2 rounded-lg hover:bg-blue-500 transition">
+            Log in with Twitter
+        </button>
     </div>
 
       <!-- Sign Out Button -->
@@ -74,7 +77,7 @@
         // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider,signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, TwitterAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // Firebase Config
         const firebaseConfig = {
@@ -99,10 +102,12 @@
         const statusDisplay = document.getElementById("status");
         const restartButton = document.getElementById("restartGame");
         const googleLoginButton = document.getElementById("googleLoginButton");
+        const twitterLoginButton = document.getElementById("twitterLoginButton");
         const signOutButton = document.getElementById("signOutButton");
 
         // Google Auth Provider
         const googleProvider = new GoogleAuthProvider();
+        const twitterProvider = new TwitterAuthProvider();
 
         // Login with Google
         googleLoginButton.addEventListener("click", () => {
@@ -121,6 +126,25 @@
                     authStatus.textContent = "Google login failed. Please try again.";
                 });
         });
+        
+        // Login with Twitter
+        twitterLoginButton.addEventListener("click", () => {
+            signInWithPopup(auth, twitterProvider)
+                .then((result) => {
+                    const user = result.user;
+                    loginForm.style.display = "none"; // Hide login form
+                    authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
+                    signOutButton.style.display = "inline-block"; // Show sign-out button
+                    startGame(); // Start the game after successful login
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode, errorMessage);
+                    authStatus.textContent = "Twitter login failed. Please try again.";
+                });
+        });
+
         
  // Sign Out functionality
         signOutButton.addEventListener("click", () => {
