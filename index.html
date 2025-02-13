@@ -56,6 +56,11 @@
         </button>
     </div>
 
+      <!-- Sign Out Button -->
+    <button id="signOutButton" class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition" style="display: none;">
+        Sign Out
+    </button>
+    
     <!-- Game Board -->
     <div id="gameBoard" class="grid bg-blue-300 p-2 rounded-lg shadow-lg" style="display: none;"></div>
 
@@ -94,6 +99,7 @@
         const statusDisplay = document.getElementById("status");
         const restartButton = document.getElementById("restartGame");
         const googleLoginButton = document.getElementById("googleLoginButton");
+        const signOutButton = document.getElementById("signOutButton");
 
         // Google Auth Provider
         const googleProvider = new GoogleAuthProvider();
@@ -112,6 +118,23 @@
                     const errorMessage = error.message;
                     console.log(errorCode, errorMessage);
                     authStatus.textContent = "Google login failed. Please try again.";
+                });
+        });
+        
+ // Sign Out functionality
+        signOutButton.addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    loginForm.style.display = "block"; // Show login form again
+                    signOutButton.style.display = "none"; // Hide sign-out button
+                    authStatus.textContent = "Please sign in to play the game";
+                    gameBoard.style.display = "none"; // Hide the game board
+                    restartButton.style.display = "none"; // Hide the restart button
+                    statusDisplay.style.display = "none"; // Hide the status
+                })
+                .catch((error) => {
+                    console.log(error);
+                    authStatus.textContent = "Error signing out. Please try again.";
                 });
         });
 
