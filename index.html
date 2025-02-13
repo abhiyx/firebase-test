@@ -111,6 +111,7 @@
                     const user = result.user;
                     loginForm.style.display = "none"; // Hide login form
                     authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
+                    signOutButton.style.display = "inline-block"; // Show sign-out button
                     startGame(); // Start the game after successful login
                 })
                 .catch((error) => {
@@ -222,6 +223,7 @@
                 loginForm.style.display = "none"; // Hide login form
                 authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
                 startGame();
+                signOutButton.style.display = "inline-block"; // Show sign-out button
             } else {
                 loginForm.style.display = "block"; // Show login form
                 authStatus.textContent = "Please sign in to play the game";
