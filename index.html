@@ -131,7 +131,7 @@
         twitterLoginButton.addEventListener("click", () => {
             signInWithRedirect(auth, twitterProvider);
         });
-        / Handle Redirect Result after Login
+        // Handle Redirect Result after Login
         getRedirectResult(auth)
             .then((result) => {
                 if (result.user) {
