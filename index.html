@@ -131,10 +131,7 @@
         twitterLoginButton.addEventListener("click", () => {
             signInWithPopup(auth, twitterProvider)
                 .then((result) => {
-                    // Close the popup window if it's still open
-            if (popupWindow && !popupWindow.closed) {
-                popupWindow.close();
-            }
+                  
                     const user = result.user;
                     loginForm.style.display = "none"; // Hide login form
                     authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
