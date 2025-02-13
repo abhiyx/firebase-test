@@ -136,6 +136,7 @@
                     authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
                     signOutButton.style.display = "inline-block"; // Show sign-out button
                     startGame(); // Start the game after successful login
+                     window.focus();
                 })
                 .catch((error) => {
                     const errorCode = error.code;
