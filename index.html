@@ -128,36 +128,26 @@
         });
         
         // Login with Twitter
-        twitterLoginButton.addEventListener("click", () => {
-            signInWithPopup(auth, twitterProvider)
-                .then((result) => {
-                  console.log("i am here 1 ");
-                    const user = result.user;
-                    loginForm.style.display = "none"; // Hide login form
-                    authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
-                    signOutButton.style.display = "inline-block"; // Show sign-out button
-                    startGame(); // Start the game after successful login
-                       // Ensure the popup is closed
-                    if (window.opener) {
-                        console.log("i am here 3.1 ");
-                        window.close(); // Close the popup if it's still open
-                    }
-                   
-                })
-                .catch((error) => {
-                    console.log("i am here 2 ");
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode, errorMessage);
-                    authStatus.textContent = "Twitter login failed. Please try again.";
-                }).finally(() => {
-                    console.log("i am here 3 ");
-            // Ensure the popup is closed even on error
-                    if (window.opener) {
-                        window.close(); // Close the popup if it's still open
-                    }
-        });
-        });
+twitterLoginButton.addEventListener("click", async () => {
+    console.log("🚀 Opening Twitter login popup...");
+
+    try {
+        const result = await signInWithPopup(auth, twitterProvider);
+        const user = result.user;
+
+        console.log(`✅ Twitter Login Successful: ${user.displayName}`);
+
+        loginForm.style.display = "none";
+        authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
+        signOutButton.style.display = "inline-block";
+
+        startGame(); // Call your game initialization function
+
+    } catch (error) {
+        console.error("⚠️ Twitter Login Error:", error.code, error.message);
+        authStatus.textContent = "Twitter login failed. Please try again.";
+    }
+});
 
         
  // Sign Out functionality
