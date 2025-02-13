@@ -131,19 +131,25 @@
         twitterLoginButton.addEventListener("click", () => {
             signInWithPopup(auth, twitterProvider)
                 .then((result) => {
+                    // Close the popup window if it's still open
+            if (popupWindow && !popupWindow.closed) {
+                popupWindow.close();
+            }
                     const user = result.user;
                     loginForm.style.display = "none"; // Hide login form
                     authStatus.textContent = `Welcome ${user.displayName}! 🎉`;
                     signOutButton.style.display = "inline-block"; // Show sign-out button
                     startGame(); // Start the game after successful login
-                     window.focus();
+                   
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     console.log(errorCode, errorMessage);
                     authStatus.textContent = "Twitter login failed. Please try again.";
-                });
+                }).finally(() => {
+            window.focus(); // This should bring focus back to the main window
+        });
         });
 
         
